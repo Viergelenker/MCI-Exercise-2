@@ -83,15 +83,27 @@
 
     function showStimulus() {
         testActive = true;
-        if (Math.random() >= 0.5 && sheepPicCounter < 20) {
+        var isFull = false;
+
+        if (!(sheepPicCounter < 20) && sheepSoundCounter < 20) {
+            sheepSoundCounter++;
+            isFull = true;
+            playSound(true);
+        }
+
+        if (!(sheepSoundCounter < 20) && sheepPicCounter < 20) {
+            sheepPicCounter++;
+            isFull = true;
+            showSheep(true);
+        }
+
+        if (!isFull && Math.random() >= 0.5 && sheepPicCounter < 20) {
             sheepPicCounter++;
             showSheep(true);
         }
-        else if (sheepSoundCounter < 20) {
+        else if (!isFull && sheepSoundCounter < 20) {
             sheepSoundCounter++;
             playSound(true);
-        } else {
-            stopExperiment();
         }
     }
 
@@ -112,11 +124,16 @@
             document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
         }
         testActive = false;
-        startTest();
+        if (!(sheepPicCounter < 20) && !(sheepSoundCounter < 20)) {
+            stopExperiment();
+        } else {
+            startTest();
+        }
     }
 
     function stopExperiment() {
         testActive = false;
+        // Calculation of the picture stimulus
         var meanDeltaTime = 0.0;
         for (var i = 0; i < picTimes.length; ++i) {
             meanDeltaTime += picTimes[i];
@@ -133,6 +150,7 @@
         document.getElementById("sdPic").innerHTML = "SD pic: " + standardDerivation + "ms";
         picTimes = [];
 
+        // Calculation of the sound stimulus
         meanDeltaTime = 0.0;
         for (i = 0; i < soundTimes.length; ++i) {
             meanDeltaTime += soundTimes[i];
@@ -148,7 +166,7 @@
         document.getElementById("meanSound").innerHTML = "Mean sound: " + meanDeltaTime + "ms";
         document.getElementById("sdSound").innerHTML = "SD sound: " + standardDerivation + "ms";
         document.getElementById("instruction").innerHTML = "Press SPACE to start!";
-        picTimes = [];
+        soundTimes = [];
         experimentActive = false;
     }
 
