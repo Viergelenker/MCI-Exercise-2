@@ -24,7 +24,9 @@
         </div>
     </div>
 
-    <h3 class="text-center" id="instruction">When ready, press SPACE to start!</h3>
+    <div class="small-12 columns">
+        <h3 class="text-center" id="instruction">When ready, press SPACE to start!</h3>
+    </div>
 
 </div>
 <div class="row">
@@ -81,11 +83,11 @@
 
     function showStimulus() {
         testActive = true;
-        if (Math.random() >= 0.5 && sheepPicCounter < 21) {
+        if (Math.random() >= 0.5 && sheepPicCounter < 20) {
             sheepPicCounter++;
             showSheep(true);
         }
-        else if (sheepSoundCounter < 21) {
+        else if (sheepSoundCounter < 20) {
             sheepSoundCounter++;
             playSound(true);
         } else {
@@ -101,11 +103,13 @@
             deltaTime = currTime - lastTimeSoundPlayed;
             soundTimes.push(deltaTime);
             document.getElementById("soundTime").innerHTML = "Sound: " + deltaTime + "ms";
+            document.getElementById("countSound").innerHTML = "Count sound: " + soundTimes.length;
         }
         else {
             deltaTime = currTime - lastTimePicChanged;
             picTimes.push(deltaTime);
             document.getElementById("picTime").innerHTML = "Picture: " + deltaTime + "ms";
+            document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
         }
         testActive = false;
         startTest();
