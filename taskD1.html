@@ -1,103 +1,210 @@
-<html>
-   <head>
-      <title>Human Capabilities - Reaction test</title>
-   </head>
-   <body>
-      <script type="text/javascript">
-         var experimentActive = false; var testActive = false;
-         var times = new Array();
-         var lastTimeColorChanged;
-         
-         function startExperiment() {
-         	experimentActive = true; 
-         	document.getElementById("time").innerHTML = "";
-          	document.getElementById("count").innerHTML = ""; 
-          	document.getElementById("mean").innerHTML = ""; 
-          	document.getElementById("sd").innerHTML = ""; 
-          	document.getElementById("instruction").innerHTML = "Press SPACE when color changes! Press 'a' for results!";
-         	startTest();
-         }
-         
-         function startTest() {
-         	changeTextColor("black");
-         	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
-         	window.setTimeout("showStimulus()", timeInSeconds * 1000);
-         }
-         
-         function showStimulus() { 
-         	testActive = true;
-         	changeTextColor("red");
-         }
-         
-         function stopTest() {
-         	var currTime = new Date().getTime();
-         	var deltaTime = currTime - lastTimeColorChanged; 
-         	times.push(deltaTime); 
-         	document.getElementById("time").innerHTML = deltaTime + "ms"; 
-         	testActive = false;
-         	startTest();
-         }
-         
-         function stopExperiment() { 
-         	window.setTimeout("showStimulus()", 0); 
-         	testActive = false;
-         	var meanDeltaTime = 0.0;
-         	for (var i = 0; i < times.length; ++i) {
-         		meanDeltaTime += times[i]; }
-         	meanDeltaTime = Math.round(meanDeltaTime / times.length);
-         	var standardDerivation = 0.0;
-         	for (var i = 0; i < times.length; ++i) {
-         		var diff = (times[i] - meanDeltaTime);
-         		standardDerivation += diff * diff; }
-         	standardDerivation =  Math.round(Math.sqrt(standardDerivation / times.length)); 
-         	document.getElementById("count").innerHTML = "Count: " + times.length; 
-         	document.getElementById("mean").innerHTML = "Mean: " + meanDeltaTime + "ms"; 
-         	document.getElementById("sd").innerHTML = "SD: " + standardDerivation + "ms"; 
-         	document.getElementById("instruction").innerHTML = "Press SPACE to start!"; 
-         	times = [];
-         	experimentActive = false; 
-         }
-         function changeTextColor(newColor) { 
-         	document.getElementById("text").style.color = newColor; 
-         	document.getElementById("text").style.backgroundColor = newColor; 
-         	lastTimeColorChanged = new Date().getTime();
-         }
-         
-         document.onkeydown = onKey;
-         function onKey(e) { if (e == null) {
-                 e = window.event;
-             }
-         	switch (e.which || e.charCode || e.keyCode) { 
-         		case 32:
-         		// space
-         		if (!experimentActive) {
-         			startExperiment(); } 
-         			else {
-         				if (testActive) {
-         					stopTest();
-         				} 
-         			}
-         		break;
-         		case 65: // a
-         		if (experimentActive) {
-         			stopExperiment(); 
-         		}
-         		break;
-         		case 66:
-         		// b
-         		// here you can extend... alert("pressed the b key"); break;
-         	} 
-         }
-      </script>
-      <h1>
-         <p id="text">User Study</p>
-      </h1>
-      <h1 id="instruction">Press SPACE to start!</h1>
-      <p>
-      <p id="time"></p>
-      <p id="count"></p>
-      <p id="mean"></p>
-      <p id="sd"></p>
-      <a href="index.html">Back to home</a>
-   </body>
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reaction test D.1</title>
+    <!-- Compressed CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css"
+          integrity="sha256-itWEYdFWzZPBG78bJOOiQIn06QCgN/F0wMDcC4nOhxY=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="row">
+    <div id="standard" class="small-12 medium-8 large-6 small-centered columns">
+        <div class="callout" style="height: 400px">
+            <h4 class="text-center">Press SPACE, every time you see or hear a sheep!</h4>
+        </div>
+    </div>
+
+    <div id="sheepPic" class="small-12 medium-8 large-6 small-centered columns" style="display: none">
+        <div class="callout" style="height: 400px">
+            <img height="427" src="sheepPicture.jpg">
+        </div>
+    </div>
+
+    <h3 class="text-center" id="instruction">When ready, press SPACE to start!</h3>
+
+</div>
+<div class="row">
+    <div class="small-6 columns text-center">
+        <p id="picTime"></p>
+        <p id="countPic"></p>
+        <p id="meanPic"></p>
+        <p id="sdPic"></p>
+    </div>
+    <div class="small-6 columns text-center">
+        <p id="soundTime"></p>
+        <p id="countSound"></p>
+        <p id="meanSound"></p>
+        <p id="sdSound"></p>
+    </div>
+    <div class="small-12 columns">
+        <a class="button" href="index.html">< Go back</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var experimentActive = false;
+    var testActive = false;
+    var picTimes = [];
+    var soundTimes = [];
+    var lastTimePicChanged;
+    var lastTimeSoundPlayed;
+    var sheepPicCounter;
+    var sheepSoundCounter;
+    var sheepSound = new Audio('sheepSound.mp3');
+
+    function startExperiment() {
+        experimentActive = true;
+        document.getElementById("picTime").innerHTML = "";
+        document.getElementById("countPic").innerHTML = "";
+        document.getElementById("meanPic").innerHTML = "";
+        document.getElementById("sdPic").innerHTML = "";
+        document.getElementById("soundTime").innerHTML = "";
+        document.getElementById("countSound").innerHTML = "";
+        document.getElementById("meanSound").innerHTML = "";
+        document.getElementById("sdSound").innerHTML = "";
+        document.getElementById("instruction").innerHTML = "Press 'a' for results!";
+        sheepPicCounter = 0;
+        sheepSoundCounter = 0;
+        startTest();
+    }
+
+    function startTest() {
+        showSheep(false);
+        playSound(false);
+        timeInSeconds = Math.random() * 4 + 2; // 2 - 6s
+        window.setTimeout("showStimulus()", timeInSeconds * 1000);
+    }
+
+    function showStimulus() {
+        testActive = true;
+        if (Math.random() >= 0.5 && sheepPicCounter < 21) {
+            sheepPicCounter++;
+            showSheep(true);
+        }
+        else if (sheepSoundCounter < 21) {
+            sheepSoundCounter++;
+            playSound(true);
+        } else {
+            stopExperiment();
+        }
+    }
+
+    function stopTest() {
+        var currTime = new Date().getTime();
+        var deltaTime;
+
+        if (lastTimeSoundPlayed >= lastTimePicChanged) {
+            deltaTime = currTime - lastTimeSoundPlayed;
+            soundTimes.push(deltaTime);
+            document.getElementById("soundTime").innerHTML = "Sound: " + deltaTime + "ms";
+        }
+        else {
+            deltaTime = currTime - lastTimePicChanged;
+            picTimes.push(deltaTime);
+            document.getElementById("picTime").innerHTML = "Picture: " + deltaTime + "ms";
+        }
+        testActive = false;
+        startTest();
+    }
+
+    function stopExperiment() {
+        testActive = false;
+        var meanDeltaTime = 0.0;
+        for (var i = 0; i < picTimes.length; ++i) {
+            meanDeltaTime += picTimes[i];
+        }
+        meanDeltaTime = Math.round(meanDeltaTime / picTimes.length);
+        var standardDerivation = 0.0;
+        for (i = 0; i < picTimes.length; ++i) {
+            var diff = (picTimes[i] - meanDeltaTime);
+            standardDerivation += diff * diff;
+        }
+        standardDerivation = Math.round(Math.sqrt(standardDerivation / picTimes.length));
+        document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
+        document.getElementById("meanPic").innerHTML = "Mean pic: " + meanDeltaTime + "ms";
+        document.getElementById("sdPic").innerHTML = "SD pic: " + standardDerivation + "ms";
+        picTimes = [];
+
+        meanDeltaTime = 0.0;
+        for (i = 0; i < soundTimes.length; ++i) {
+            meanDeltaTime += soundTimes[i];
+        }
+        meanDeltaTime = Math.round(meanDeltaTime / soundTimes.length);
+        standardDerivation = 0.0;
+        for (i = 0; i < soundTimes.length; ++i) {
+            diff = (soundTimes[i] - meanDeltaTime);
+            standardDerivation += diff * diff;
+        }
+        standardDerivation = Math.round(Math.sqrt(standardDerivation / soundTimes.length));
+        document.getElementById("countSound").innerHTML = "Count sound: " + soundTimes.length;
+        document.getElementById("meanSound").innerHTML = "Mean sound: " + meanDeltaTime + "ms";
+        document.getElementById("sdSound").innerHTML = "SD sound: " + standardDerivation + "ms";
+        document.getElementById("instruction").innerHTML = "Press SPACE to start!";
+        picTimes = [];
+        experimentActive = false;
+    }
+
+    function showSheep(show) {
+        if (show) {
+            document.getElementById("sheepPic").style.display = "block";
+            document.getElementById("standard").style.display = "none";
+        }
+        else {
+            document.getElementById("sheepPic").style.display = "none";
+            document.getElementById("standard").style.display = "block";
+        }
+        lastTimePicChanged = new Date().getTime();
+    }
+
+    function playSound(play) {
+        if (play) {
+            sheepSound.play();
+        }
+        lastTimeSoundPlayed = new Date().getTime();
+    }
+
+    document.onkeydown = onKey;
+    function onKey(e) {
+        if (e === null) {
+            e = window.event;
+        }
+        switch (e.which || e.charCode || e.keyCode) {
+            case 32:
+                // space
+                if (!experimentActive) {
+                    startExperiment();
+                }
+                else {
+                    if (testActive) {
+                        stopTest();
+                    }
+                }
+                break;
+            case 65: // a
+                if (experimentActive) {
+                    stopExperiment();
+                }
+                break;
+            case 66:
+            // b
+            // here you can extend... alert("pressed the b key"); break;
+        }
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/what-input/4.1.1/what-input.min.js"></script>
+<!-- Compressed JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/js/foundation.min.js"
+        integrity="sha256-Nd2xznOkrE9HkrAMi4xWy/hXkQraXioBg9iYsBrcFrs=" crossorigin="anonymous"></script>
+<script>
+    $(document).foundation();
+</script>
+
+</body>
 </html>
