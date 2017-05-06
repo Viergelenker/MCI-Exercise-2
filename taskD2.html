@@ -1,103 +1,255 @@
-<html>
-   <head>
-      <title>Human Capabilities - Reaction test</title>
-   </head>
-   <body>
-      <script type="text/javascript">
-         var experimentActive = false; var testActive = false;
-         var times = new Array();
-         var lastTimeColorChanged;
-         
-         function startExperiment() {
-         	experimentActive = true; 
-         	document.getElementById("time").innerHTML = "";
-          	document.getElementById("count").innerHTML = ""; 
-          	document.getElementById("mean").innerHTML = ""; 
-          	document.getElementById("sd").innerHTML = ""; 
-          	document.getElementById("instruction").innerHTML = "Press SPACE when color changes! Press 'a' for results!";
-         	startTest();
-         }
-         
-         function startTest() {
-         	changeTextColor("black");
-         	timeInSeconds = Math.random() * 4 + 2; // 2 - 6s 
-         	window.setTimeout("showStimulus()", timeInSeconds * 1000);
-         }
-         
-         function showStimulus() { 
-         	testActive = true;
-         	changeTextColor("red");
-         }
-         
-         function stopTest() {
-         	var currTime = new Date().getTime();
-         	var deltaTime = currTime - lastTimeColorChanged; 
-         	times.push(deltaTime); 
-         	document.getElementById("time").innerHTML = deltaTime + "ms"; 
-         	testActive = false;
-         	startTest();
-         }
-         
-         function stopExperiment() { 
-         	window.setTimeout("showStimulus()", 0); 
-         	testActive = false;
-         	var meanDeltaTime = 0.0;
-         	for (var i = 0; i < times.length; ++i) {
-         		meanDeltaTime += times[i]; }
-         	meanDeltaTime = Math.round(meanDeltaTime / times.length);
-         	var standardDerivation = 0.0;
-         	for (var i = 0; i < times.length; ++i) {
-         		var diff = (times[i] - meanDeltaTime);
-         		standardDerivation += diff * diff; }
-         	standardDerivation =  Math.round(Math.sqrt(standardDerivation / times.length)); 
-         	document.getElementById("count").innerHTML = "Count: " + times.length; 
-         	document.getElementById("mean").innerHTML = "Mean: " + meanDeltaTime + "ms"; 
-         	document.getElementById("sd").innerHTML = "SD: " + standardDerivation + "ms"; 
-         	document.getElementById("instruction").innerHTML = "Press SPACE to start!"; 
-         	times = [];
-         	experimentActive = false; 
-         }
-         function changeTextColor(newColor) { 
-         	document.getElementById("text").style.color = newColor; 
-         	document.getElementById("text").style.backgroundColor = newColor; 
-         	lastTimeColorChanged = new Date().getTime();
-         }
-         
-         document.onkeydown = onKey;
-         function onKey(e) { if (e == null) {
-                 e = window.event;
-             }
-         	switch (e.which || e.charCode || e.keyCode) { 
-         		case 32:
-         		// space
-         		if (!experimentActive) {
-         			startExperiment(); } 
-         			else {
-         				if (testActive) {
-         					stopTest();
-         				} 
-         			}
-         		break;
-         		case 65: // a
-         		if (experimentActive) {
-         			stopExperiment(); 
-         		}
-         		break;
-         		case 66:
-         		// b
-         		// here you can extend... alert("pressed the b key"); break;
-         	} 
-         }
-      </script>
-      <h1>
-         <p id="text">User Study</p>
-      </h1>
-      <h1 id="instruction">Press SPACE to start!</h1>
-      <p>
-      <p id="time"></p>
-      <p id="count"></p>
-      <p id="mean"></p>
-      <p id="sd"></p>
-      <a href="index.html">Back to home</a>
-   </body>
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+   <meta charset="utf-8"/>
+   <meta http-equiv="x-ua-compatible" content="ie=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>Reaction test D.1</title>
+   <!-- Compressed CSS -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css"
+         integrity="sha256-itWEYdFWzZPBG78bJOOiQIn06QCgN/F0wMDcC4nOhxY=" crossorigin="anonymous"/>
+   <link rel="stylesheet" href="app.css">
+   <style>
+      #circle {
+         position: relative;
+         top: 50%;
+         -webkit-transform: translateY(-50%);
+         -ms-transform: translateY(-50%);
+         transform: translateY(-50%);
+         background-color: red;
+         border: 1px solid black;
+         margin-left: auto;
+         margin-right: auto;
+   }</style>
+
+   <style>
+      #box {
+         position: relative;
+         top: 50%;
+         -webkit-transform: translateY(-50%);
+         -ms-transform: translateY(-50%);
+         transform: translateY(-50%);
+         background-color: green;
+         border: 1px solid black;
+         margin-right: auto;
+         margin-left: auto;
+      }</style>
+
+</head>
+<body>
+<div class="row">
+   <div id="standard" class="small-12 medium-8 large-6 small-centered columns">
+      <div class="callout"style="height: 400px">
+         <h4 class="text-center">Press SPACE, every time you see a Square!</h4>
+      </div>
+   </div>
+
+   <div id="circleframe"class="small-12 medium-8 large-6 small-centered columns" style="display: none">
+      <div class="callout" style="height: 400px">
+         <div id="circle"></div>
+      </div>
+   </div>
+   <div id="boxframe"class="small-12 medium-8 large-6 small-centered columns" style="display: none">
+      <div class="callout" style="height: 400px">
+         <div id="box"></div>
+      </div>
+   </div>
+
+   <div class="small-12 columns">
+      <h3 class="text-center" id="instruction">When ready, press SPACE to start!</h3>
+   </div>
+
+</div>
+<div class="row">
+   <div class="small-6 columns text-center">
+      <p id="circleTime"></p>
+      <p id="countCircle"></p>
+      <p id="meanCircle"></p>
+      <p id="sdCircle"></p>
+   </div>
+   <div class="small-6 columns text-center">
+      <p id="boxTime"></p>
+      <p id="countBox"></p>
+      <p id="meanBox"></p>
+      <p id="sdBox"></p>
+   </div>
+   <div class="small-12 columns">
+      <a class="button" href="index.html">< Go back</a>
+   </div>
+</div>
+
+<script type="text/javascript">
+    var experimentActive = false;
+    var testActive = false;
+    var circleTimes = [];
+    var boxTimes = [];
+    var lastTimeCircle;
+    var lastTimeBox;
+    var circleCounter;
+    var boxCounter;
+    var size;
+
+    function startExperiment() {
+        experimentActive = true;
+        document.getElementById("circleTime").innerHTML = "";
+        document.getElementById("countCircle").innerHTML = "";
+        document.getElementById("meanCircle").innerHTML = "";
+        document.getElementById("sdCircle").innerHTML = "";
+        document.getElementById("boxTime").innerHTML = "";
+        document.getElementById("countBox").innerHTML = "";
+        document.getElementById("meanBox").innerHTML = "";
+        document.getElementById("sdBox").innerHTML = "";
+        document.getElementById("instruction").innerHTML = "Press 'a' for results!";
+        circleCounter = 0;
+        boxCounter = 0;
+        startTest();
+    }
+
+    function startTest() {
+        showCircle(false);
+        showBox(false);
+        timeInSeconds = Math.random() * 4 + 2; // 2 - 6s
+        window.setTimeout("showStimulus()", timeInSeconds * 1000);
+    }
+
+    function showStimulus() {
+        testActive = true;
+        if (Math.random() >= 0.5 && circleCounter < 20) {
+            circleCounter++;
+            showCircle(true);
+        }
+        else if (boxCounter < 20) {
+            boxCounter++;
+            showBox(true);
+        } else {
+            stopExperiment();
+        }
+    }
+
+    function stopTest() {
+        var currTime = new Date().getTime();
+        var deltaTime;
+
+        if (lastTimeBox >= lastTimeCircle) {
+            deltaTime = currTime - lastTimeBox;
+            boxTimes.push(deltaTime);
+            document.getElementById("boxTime").innerHTML = "Time: " + deltaTime + "ms";
+            document.getElementById("countBox").innerHTML = "Count right: " + boxTimes.length;
+        }
+        else {
+            deltaTime = currTime - lastTimeCircle;
+            circleTimes.push(deltaTime);
+            document.getElementById("circleTime").innerHTML = "";
+            document.getElementById("countCircle").innerHTML = "Count failure: " + circleTimes.length;
+        }
+        testActive = false;
+        startTest();
+    }
+
+    function stopExperiment() {
+        testActive = false;
+        var meanDeltaTime = 0.0;
+        for (var i = 0; i < circleTimes.length; ++i) {
+            meanDeltaTime += circleTimes[i];
+        }
+        meanDeltaTime = Math.round(meanDeltaTime / circleTimes.length);
+        var standardDerivation = 0.0;
+        for (i = 0; i < circleTimes.length; ++i) {
+            var diff = (circleTimes[i] - meanDeltaTime);
+            standardDerivation += diff * diff;
+        }
+        document.getElementById("countCircle").innerHTML = "Failures " + circleTimes.length;
+        circleTimes = [];
+
+        meanDeltaTime = 0.0;
+        for (i = 0; i < boxTimes.length; ++i) {
+            meanDeltaTime += boxTimes[i];
+        }
+        meanDeltaTime = Math.round(meanDeltaTime / boxTimes.length);
+        standardDerivation = 0.0;
+        for (i = 0; i < boxTimes.length; ++i) {
+            diff = (boxTimes[i] - meanDeltaTime);
+            standardDerivation += diff * diff;
+        }
+        standardDerivation = Math.round(Math.sqrt(standardDerivation / boxTimes.length));
+        document.getElementById("countBox").innerHTML = "Count Square: " + boxTimes.length;
+        document.getElementById("meanBox").innerHTML = "Mean Square: " + meanDeltaTime + "ms";
+        document.getElementById("sdBox").innerHTML = "SD Square: " + standardDerivation + "ms";
+        document.getElementById("instruction").innerHTML = "Press SPACE to start!";
+        circleTimes = [];
+        experimentActive = false;
+    }
+
+    function showCircle(circle) {
+        if (circle) {
+            size = Math.floor((Math.random() * 201) + 150);
+            document.getElementById("circle").style.width = size + "px";
+            document.getElementById("circle").style.height = size + "px";
+            document.getElementById("circle").style.borderRadius = size/2 + "px";
+            document.getElementById("circle").style.width
+            document.getElementById("circleframe").style.display = "block";
+            document.getElementById("standard").style.display = "none";
+        }
+        else {
+            document.getElementById("circleframe").style.display = "none";
+            document.getElementById("standard").style.display = "block";
+        }
+        lastTimeCircle = new Date().getTime();
+    }
+
+    function showBox(box) {
+        if (box) {
+            size = Math.floor((Math.random() * 201) + 150);
+            document.getElementById("box").style.width = size + "px";
+            document.getElementById("box").style.height = size + "px";
+            document.getElementById("boxframe").style.display = "block";
+            document.getElementById("standard").style.display = "none";
+        }
+        else {
+            document.getElementById("boxframe").style.display = "none";
+            document.getElementById("standard").style.display = "block";
+        }
+        lastTimeBox = new Date().getTime();
+    }
+
+    document.onkeydown = onKey;
+    function onKey(e) {
+        if (e === null) {
+            e = window.event;
+        }
+        switch (e.which || e.charCode || e.keyCode) {
+            case 32:
+                // space
+                if (!experimentActive) {
+                    startExperiment();
+                }
+                else {
+                    if (testActive) {
+                        stopTest();
+                    }
+                }
+                break;
+            case 65: // a
+                if (experimentActive) {
+                    stopExperiment();
+                }
+                break;
+            case 66:
+            // b
+            // here you can extend... alert("pressed the b key"); break;
+        }
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/what-input/4.1.1/what-input.min.js"></script>
+<!-- Compressed JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/js/foundation.min.js"
+        integrity="sha256-Nd2xznOkrE9HkrAMi4xWy/hXkQraXioBg9iYsBrcFrs=" crossorigin="anonymous"></script>
+<script>
+    $(document).foundation();
+</script>
+
+</body>
 </html>
