@@ -146,6 +146,11 @@
         startTest();
     }
 
+    function stopTestRight() {
+        testActive = false;
+        startTest();
+    }
+
     function stopExperiment() {
         testActive = false;
         var meanDeltaTime = 0.0;
@@ -189,6 +194,7 @@
             document.getElementById("circle").style.width
             document.getElementById("circleframe").style.display = "block";
             document.getElementById("standard").style.display = "none";
+            setTimeout(stopTestRight, 3000);
         }
         else {
             document.getElementById("circleframe").style.display = "none";
