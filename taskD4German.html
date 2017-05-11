@@ -15,20 +15,20 @@
 
     <div class="small-4 columns" style="border: thin solid">
         <div class="small-4 float-right columns text-right">
-            <a class="button secondary tiny" href="taskD4German.html">Deutsch ></a>
+            <a class="button secondary tiny" href="taskD4.html">English ></a>
         </div>
         <div class="row">
             <div class="small-12 columns">
-                <h4>Color brain-teaser</h4>
-                <p>Your task is to press the correct arrow key for each color.</p>
-                <p>Mode A: Only concentrate on the actual color, not the word.</p>
-                <p>Mode B: Focus on the word, not the color.</p>
+                <h4>Farben Kopfnuss</h4>
+                <p>Deine Aufgabe ist es, die richtige Pfeiltaste für die jeweilige Farbe zu drücken.</p>
+                <p>Modus A: Konzentriere dich nur auf die Farbe, nicht das Wort.</p>
+                <p>Modus B: Fokussiere dich nur auf das Wort, nicht die Farbe.</p>
             </div>
             <div class="small-6 columns">
-                <button class="button" id="modeA" onclick="startExperiment('a')">Mode A</button>
+                <button class="button" id="modeA" onclick="startExperiment('a')">Modus A</button>
             </div>
             <div class="small-6 text-right columns">
-                <button class="button" id="modeB" onclick="startExperiment('b')">Mode B</button>
+                <button class="button" id="modeB" onclick="startExperiment('b')">Modus B</button>
             </div>
             <div class="small-8 columns">
                 <p id="time"></p>
@@ -47,7 +47,7 @@
         <div class="row" style="padding-top: 0">
             <div class="small-3 small-centered columns text-center">
                 <h4>↑</h4>
-                <h4 id="greenColor" style="background-color: #3adb76">Green</h4>
+                <h4 id="greenColor" style="background-color: #3adb76">Grün</h4>
             </div>
         </div>
         <br/>
@@ -55,27 +55,27 @@
         <div class="row">
 
             <div class="small-4 columns" id="blueSection">
-                <h4>← <span id="blueColor" style="background-color: #1779ba; padding: 4px 40px">Blue</span>
+                <h4>← <span id="blueColor" style="background-color: #1779ba; padding: 4px 40px">Blau</span>
                 </h4>
             </div>
             <div class="small-4 text-center wordContainer columns" style="display: none">
-                <h4 class="word">Blue</h4>
+                <h4 class="word">Blau</h4>
             </div>
             <div class="small-4 text-center wordContainer columns" style="display: none">
-                <h4 class="word">Green</h4>
+                <h4 class="word">Grün</h4>
             </div>
             <div class="small-4 text-center wordContainer columns" style="display: none">
-                <h4 class="word">Red</h4>
+                <h4 class="word">Rot</h4>
             </div>
             <div class="small-4 text-center wordContainer columns" style="display: none">
-                <h4 class="word">Yellow</h4>
+                <h4 class="word">Gelb</h4>
             </div>
             <div id="pointsContainer" class="small-4 text-center columns" style="display: none">
                 <h4 id="points"></h4>
             </div>
 
             <div class="small-4 float-right text-right columns" id="redSection">
-                <h4><span id="redColor" style="background-color: #cc4b37; padding: 4px 40px">Red</span> →</h4>
+                <h4><span id="redColor" style="background-color: #cc4b37; padding: 4px 40px">Rot</span> →</h4>
             </div>
 
         </div>
@@ -83,7 +83,7 @@
         <br/>
         <div class="row">
             <div class="small-3 small-centered columns text-center" id="yellowSection">
-                <h4 id="yellowColor" style="background-color: #ffae00">Yellow</h4>
+                <h4 id="yellowColor" style="background-color: #ffae00">Gelb</h4>
                 <h4>↓</h4>
             </div>
         </div>
@@ -92,8 +92,8 @@
 </div>
 
 <div class="row">
-    <div class="small-12 columns">
-        <a class="button" href="index.html">< Go back</a>
+    <div class="small-2 columns">
+        <a class="button" href="index.html">< Zurück</a>
     </div>
 </div>
 
@@ -258,11 +258,11 @@
         testActive = false;
         showWordWithRandomColor(false);
         pointsContainerElement.style.display = "block";
-        pointsElement.innerHTML = "Finished! Your score is: " + points;
+        pointsElement.innerHTML = "Fertig! Du hast: " + points + " Punkte!";
 
         // Update the time
         var currentTime = new Date().getTime();
-        document.getElementById("time").innerHTML = "Total: " + millisToSeconds(currentTime - startTime) + " seconds";
+        document.getElementById("time").innerHTML = "Benötigte Zeit: " + millisToSeconds(currentTime - startTime) + " Sekunden";
 
         // Calculation of the picture stimulus
         var meanDeltaTime = 0.0;
@@ -276,7 +276,7 @@
             standardDerivation += diff * diff;
         }
         standardDerivation = Math.round(Math.sqrt(standardDerivation / times.length));
-        meanElement.innerHTML = "Mean: " + meanDeltaTime + "ms";
+        meanElement.innerHTML = "Mittelwert: " + meanDeltaTime + "ms";
         sdElement.innerHTML = "SD: " + standardDerivation + "ms";
         times = [];
 
@@ -285,13 +285,13 @@
         modeBButtonElement.removeAttribute("disabled");
 
         if (amountOfGames === 5) {
-            alert("You just played 5 games in a row! Sick!")
+            alert("Du hast 5 Spiele am Stück gespielt! Hammer!")
         } else if (amountOfGames === 10) {
-            alert("You've played 10 games now... Are you addicted?")
+            alert("Du hast 10 Spiele gespielt... Bist du süchtig?")
         } else if (amountOfGames === 50) {
-            alert("50 games in a row... YOU ARE INSANE!")
+            alert("50 Spiele hintereinander... Du bist verrückt!")
         } else if (points === 20) {
-            alert("Boom! No mistakes!")
+            alert("Boom! Nicht ein Fehler!")
         }
 
     }
