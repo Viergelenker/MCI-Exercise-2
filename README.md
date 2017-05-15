@@ -4,4 +4,4 @@ Developed by
 * Felix Mutter 2962749
 * Julien Vollweiter 2954484
 
-Please go to https://viergelenker.github.io/MCI-Exercise-2/ to see our work.
+Please click [here](https://viergelenker.github.io/MCI-Exercise-2/) for a demo.
