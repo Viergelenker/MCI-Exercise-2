@@ -29,6 +29,9 @@
     </div>
 
 </div>
+<div class="row text-center">
+    <p id="errorCount"></p>
+</div>
 <div class="row">
     <div class="small-6 columns text-center">
         <p id="picTime"></p>
@@ -56,10 +59,12 @@
     var lastTimeSoundPlayed;
     var sheepPicCounter;
     var sheepSoundCounter;
+    var errorCounter;
     var sheepSound = new Audio('sheepSound.mp3');
 
     function startExperiment() {
         experimentActive = true;
+        document.getElementById("errorCount").innerHTML = "";
         document.getElementById("picTime").innerHTML = "";
         document.getElementById("countPic").innerHTML = "";
         document.getElementById("meanPic").innerHTML = "";
@@ -71,6 +76,7 @@
         document.getElementById("instruction").innerHTML = "Press 'a' for results!";
         sheepPicCounter = 0;
         sheepSoundCounter = 0;
+        errorCounter = 0;
         startTest();
     }
 
@@ -108,26 +114,31 @@
     }
 
     function stopTest() {
-        var currTime = new Date().getTime();
-        var deltaTime;
-
-        if (lastTimeSoundPlayed >= lastTimePicChanged) {
-            deltaTime = currTime - lastTimeSoundPlayed;
-            soundTimes.push(deltaTime);
-            document.getElementById("soundTime").innerHTML = "Sound: " + deltaTime + "ms";
-            document.getElementById("countSound").innerHTML = "Count sound: " + soundTimes.length;
-        }
-        else {
-            deltaTime = currTime - lastTimePicChanged;
-            picTimes.push(deltaTime);
-            document.getElementById("picTime").innerHTML = "Picture: " + deltaTime + "ms";
-            document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
-        }
-        testActive = false;
-        if (!(sheepPicCounter < 25) && !(sheepSoundCounter < 25)) {
-            stopExperiment();
+        if (!testActive) {
+            errorCounter++;
+            document.getElementById("errorCount").innerHTML = "Errors: " + errorCounter;
         } else {
-            startTest();
+            var currTime = new Date().getTime();
+            var deltaTime;
+
+            if (lastTimeSoundPlayed >= lastTimePicChanged) {
+                deltaTime = currTime - lastTimeSoundPlayed;
+                soundTimes.push(deltaTime);
+                document.getElementById("soundTime").innerHTML = "Sound: " + deltaTime + "ms";
+                document.getElementById("countSound").innerHTML = "Count sound: " + soundTimes.length;
+            }
+            else {
+                deltaTime = currTime - lastTimePicChanged;
+                picTimes.push(deltaTime);
+                document.getElementById("picTime").innerHTML = "Picture: " + deltaTime + "ms";
+                document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
+            }
+            testActive = false;
+            if (!(sheepPicCounter < 25) && !(sheepSoundCounter < 25)) {
+                stopExperiment();
+            } else {
+                startTest();
+            }
         }
     }
 
@@ -201,9 +212,7 @@
                     startExperiment();
                 }
                 else {
-                    if (testActive) {
-                        stopTest();
-                    }
+                    stopTest();
                 }
                 break;
             case 65: // a
