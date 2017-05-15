@@ -85,23 +85,23 @@
         testActive = true;
         var isFull = false;
 
-        if (!(sheepPicCounter < 20) && sheepSoundCounter < 20) {
+        if (!(sheepPicCounter < 25) && sheepSoundCounter < 25) {
             sheepSoundCounter++;
             isFull = true;
             playSound(true);
         }
 
-        if (!(sheepSoundCounter < 20) && sheepPicCounter < 20) {
+        if (!(sheepSoundCounter < 25) && sheepPicCounter < 25) {
             sheepPicCounter++;
             isFull = true;
             showSheep(true);
         }
 
-        if (!isFull && Math.random() >= 0.5 && sheepPicCounter < 20) {
+        if (!isFull && Math.random() >= 0.5 && sheepPicCounter < 25) {
             sheepPicCounter++;
             showSheep(true);
         }
-        else if (!isFull && sheepSoundCounter < 20) {
+        else if (!isFull && sheepSoundCounter < 25) {
             sheepSoundCounter++;
             playSound(true);
         }
@@ -124,7 +124,7 @@
             document.getElementById("countPic").innerHTML = "Count pic: " + picTimes.length;
         }
         testActive = false;
-        if (!(sheepPicCounter < 20) && !(sheepSoundCounter < 20)) {
+        if (!(sheepPicCounter < 25) && !(sheepSoundCounter < 25)) {
             stopExperiment();
         } else {
             startTest();
