@@ -1,0 +1,209 @@
+
+<html>
+	<head>
+		<title>Human Capabilities - Reaction test</title>
+ </head>
+	<body>
+		<script type="text/javascript">
+			var experimentActive = false;
+			var testActive = false;
+			var times = new Array();
+			var lastTimeAction;
+			var counter = 0;
+			var truecounter = 0;
+			var falsecounter = 0;
+			var ergebnis = false;
+			var errors = 0;
+			
+			var truelist = [
+				"Germany",
+				"Ukraine",
+				"South Korea",
+				"Netherlands",
+				"Poland",
+				"Ireland",
+				"Tunisia",
+				"Turkey",
+				"Austria",
+				"Luxemburg",
+				"Spain",
+				"Brazil",
+				"Italy",
+				"India",
+				"Venezuela",
+				"Nigeria",
+				"Canada",
+				"Japan",
+				"China",
+				"Marocco",
+                "Greece"
+			];
+			
+			var falselist = [
+				"Berlin",
+				"Habana",
+                "Beijing",
+				"Tokyo",
+				"Amsterdam",
+				"Paris",
+				"Madrid",
+				"Stuttgart",
+				"York",
+				"Seattle",
+				"Odessa",
+				"Cologne",
+				"Chicago",
+				"Prague",
+				"Kyiv",
+				"Hamburg",
+				"London",
+				"Edinburgh",
+				"Dublin",
+                "Brazilia",
+                "Antananarivo"
+			];
+			
+
+			function startExperiment() {
+				experimentActive = true;
+				counter = 0;
+				truecounter = 0;
+				falsecounter = 0;
+				ergebnis = false;
+				errors = 0;
+				times = [];
+				
+				document.getElementById("time").innerHTML = "";
+				document.getElementById("counter").innerHTML = "";
+				document.getElementById("mean").innerHTML = "";
+				document.getElementById("sd").innerHTML = "";
+				document.getElementById("errors").innerHTML = "";
+
+				document.getElementById("instruction").innerHTML = "Press 't' if you see a land, and 'f' if you see a city!";
+				
+				startTest();
+			}
+
+			function startTest() {
+				r = Math.random();
+				
+				if (r < .5) {
+					ergebnis = true;
+				} else {
+					ergebnis = false;
+				}
+				
+				if ((ergebnis && truecounter >= 25) || (!ergebnis && falsecounter >= 25)) {
+					ergebnis = !ergebnis;
+				}
+				
+				if (ergebnis) {
+					isTrue();
+				} else {
+					isFalse();
+				}
+				
+				
+			}
+			
+			function isTrue() {
+				testActive = true;
+				r = parseInt(Math.random() * truelist.length);
+				document.getElementById("ausgabe").innerHTML = truelist[r];
+				truecounter++;
+				lastTimeAction = new Date().getTime();
+			}
+			
+			function isFalse() {
+				testActive = true;
+				r = parseInt(Math.random() * falselist.length);
+				document.getElementById("ausgabe").innerHTML = falselist[r];
+				falsecounter++;
+				lastTimeAction = new Date().getTime();
+			}
+
+			function stopTest() {
+				
+				var currTime = new Date().getTime();
+				var deltaTime = currTime - lastTimeAction;
+				
+				times.push(deltaTime);
+				
+				document.getElementById("time").innerHTML = deltaTime + "ms";
+				testActive = false;
+				counter++;
+				
+				if (counter >= 50) {
+					stopExperiment();
+				} else {
+					startTest();
+				}
+			}
+
+			function stopExperiment() {
+				testActive = false;
+				document.getElementById("ausgabe").innerHTML = "";
+				
+				var meanDeltaTime = 0.0;
+				for (var i = 0; i < times.length; ++i) {
+					meanDeltaTime += times[i];
+				}
+				meanDeltaTime = Math.round(meanDeltaTime / times.length);
+				var standardDerivation = 0.0;
+				for (var i = 0; i < times.length; ++i) {
+					var diff = (times[i] - meanDeltaTime);
+					standardDerivation += diff * diff;
+				}
+				
+				standardDerivation = Math.round(Math.sqrt(standardDerivation / times.length));
+				document.getElementById("counter").innerHTML = "Count: " + times.length;
+				document.getElementById("mean").innerHTML = "Mean: " + meanDeltaTime + "ms";
+				document.getElementById("sd").innerHTML = "SD: " + standardDerivation + "ms";
+				document.getElementById("errors").innerHTML = "Errors: " + errors;
+				document.getElementById("instruction").innerHTML = "Press SPACE to start!";
+				experimentActive = false;
+			}
+
+			document.onkeydown = onKey;
+			function onKey(e) {
+				if (e == null) {
+					e = window.event;
+				}
+				switch (e.which || e.charCode || e.keyCode) {
+					case 32:
+						// space
+						if (!experimentActive) {
+							startExperiment();
+						}
+						break;
+					case 84:
+						// t
+						if (experimentActive && !ergebnis) {
+							errors++;
+						}
+						stopTest();
+						break;
+					case 70:
+						// f
+						if (experimentActive && ergebnis) {
+							errors++;
+						}
+						stopTest();
+						break;
+				}
+			}
+		</script>
+		<h1>
+		<p id="ausgabe">
+		</p></h1>
+		
+		<h1 id="instruction">Press SPACE to start!</h1>
+		<p>
+		<p id="time"></p>
+		
+		<p id="counter"></p>
+		<p id="mean"></p>
+		<p id="sd"></p>
+		<p id="errors"></p>
+	</body>
+</html>
