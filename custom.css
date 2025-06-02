@@ -645,7 +645,7 @@
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  gap: var(--global-gap);
+  gap: 25px;
 }
 .ppa-icon-teaser-grid.ppa-container-fluid-max-xl .ppa-itg-content .ppa-itg-column {
   width: 215px;
