@@ -332,6 +332,10 @@
   display: none;
 }
 
+html:not(#__):not(#___) #content .page-editor__no-fragments-state {
+  container-type: normal;
+}
+
 .footer {
   padding: calc(4 * 1rem) 0;
   font-size: calc(1 * 1rem);
@@ -394,6 +398,9 @@
 }
 .footer-search h4 {
   color: var(--brand-color-3) !important;
+}
+.footer-search .portlet-search-bar .search-bar-keywords-input-wrapper {
+  flex-wrap: nowrap;
 }
 .footer-search .input-group, .footer-search .lfr-tooltip-scope {
   width: 442px;
