@@ -248,9 +248,6 @@
   background-color: var(--brand-color-3);
   box-shadow: 0 0 3px rgba(60, 72, 88, 0.15);
 }
-.header > .container {
-  align-items: center;
-}
 .header .portlet {
   position: unset;
 }
@@ -350,6 +347,7 @@
   background-color: var(--brand-color-3);
   padding: 30px;
   width: 100vw;
+  word-break: break-word;
 }
 .header .mobile-nav-wrapper ul, .header .mobile-nav-wrapper li {
   list-style: none;
@@ -390,11 +388,6 @@
 .header .mobile-nav-toggle .ppa-icon-menu {
   font-size: 1.5rem;
   color: inherit;
-}
-@media (max-width: 991.98px) {
-  .header > .container {
-    align-items: start;
-  }
 }
 
 .hero-banner {
