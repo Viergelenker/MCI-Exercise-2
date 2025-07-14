@@ -389,16 +389,13 @@
   font-size: 1.5rem;
   color: inherit;
 }
-.header.scrolled {
-  top: 0;
-}
 
 .hero-banner {
   position: relative;
   text-align: center;
   color: var(--brand-color-3);
 }
-.hero-banner img {
+.hero-banner .hero-banner-image {
   min-height: 560px;
   max-height: 600px;
   object-fit: cover;
@@ -1070,29 +1067,27 @@ html:not(#__):not(#___) #content .page-editor__no-fragments-state {
   margin: 0;
   display: grid;
 }
-.cardOnImage_image picture {
-  grid-area: item;
-}
-.cardOnImage_image picture .card-img {
+.cardOnImage_image .card-img, .cardOnImage_image picture {
   border-radius: 10px 10px 0 0;
   object-fit: cover;
   height: 300px;
+  grid-area: item;
 }
-.cardOnImage_image picture .card-img.position-center {
+.cardOnImage_image .card-img.position-center, .cardOnImage_image picture.position-center {
   object-position: center;
 }
-.cardOnImage_image picture .card-img.position-top {
+.cardOnImage_image .card-img.position-top, .cardOnImage_image picture.position-top {
   object-position: top center;
 }
 @media (min-width: 769px) {
-  .cardOnImage_image picture .card-img {
+  .cardOnImage_image .card-img, .cardOnImage_image picture {
     width: 700px;
     height: 400px;
     border-radius: 10px;
   }
 }
 @media (min-width: 993px) {
-  .cardOnImage_image picture .card-img {
+  .cardOnImage_image .card-img, .cardOnImage_image picture {
     border-radius: 0 10px 10px 10px;
     width: 660px;
     height: 670px;
@@ -1111,12 +1106,16 @@ html:not(#__):not(#___) #content .page-editor__no-fragments-state {
   }
 }
 .cardOnImage_logo {
+  display: none;
   transform: translateX(275px) translateY(260px);
   position: absolute;
 }
 .cardOnImage_logo .kununu_logo {
   width: 100px;
   height: auto;
+}
+.cardOnImage_logo.show-kununu-icon {
+  display: block;
 }
 @media (min-width: 769px) {
   .cardOnImage_logo {
@@ -1386,8 +1385,6 @@ html:not(#__):not(#___) #content .page-editor__no-fragments-state {
   object-position: top center;
 }
 #wrapper .ppa-quote-slider.ppa-container-fluid-max-xl .splide .splide__slide .ppa-qs-content .ppa-qs-text-wrapper {
-  display: flex;
-  flex-wrap: wrap;
   margin-left: 40px;
 }
 #wrapper .ppa-quote-slider.ppa-container-fluid-max-xl .splide .splide__arrow {
